@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar primary>
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons end>
+      <button (click)="goHome()">
+        <ion-icon name="home"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button (click)="goPedidos()">
+        <ion-icon name="cart"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="filtrar($event)" placeholder="Buscar"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item-sliding *ngFor="let perfil of perfiles" text-wrap>
+      <ion-item tappable (click)="goPerfil(perfil)">
+        <ion-thumbnail item-left>
+          <img src="http://www.indumatics.com.ar/assets/media/perfiles/xs/{{perfil.idPerfil}}.png">
+        </ion-thumbnail>
+        <h2>{{ perfil.idPerfil }}</h2>
+        <h3>{{perfil.descripcion}}</h3>
+        <p>L:{{perfil.largo}} - Kg/m:{{perfil.pxm}} - B/P:{{perfil.bxp}}</p>
+        <ion-icon name="more" item-right></ion-icon>
+      </ion-item>
+      <ion-item-options>
+        <button secondary (click)="goPerfil(perfil)">
+          <ion-icon name="eye">
+          </ion-icon>
+        </button>
+        <button primary (click)="addPedido(perfil)">
+          <ion-icon name="cart">
+          </ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

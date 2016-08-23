@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-navbar primary>
+    <ion-title><ion-icon name="albums"></ion-icon> {{title}}</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-list>
+    <ion-item tappable *ngFor="let linea of lineas" (click)="goPerfiles(linea)">
+      <h2>{{linea.linea}}</h2>
+      <p>{{linea.descripcion}}</p>
+      <ion-icon name="arrow-dropright" item-right></ion-icon>
+    </ion-item>
+  </ion-list>
+</ion-content>

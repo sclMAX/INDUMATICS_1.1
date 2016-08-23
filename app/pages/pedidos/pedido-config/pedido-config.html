@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-navbar primary>
+    <ion-title>{{title}}</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-list>
+    <ion-item-group>
+      <ion-item-divider light>AJUSTES PEDIDO ACTUAL</ion-item-divider>
+      <form #pedidoForm="ngForm" (ngSubmit)="savePedido()">
+        <ion-list>
+          <ion-item>
+            <ion-label primary stacked>Tipo</ion-label>
+            <ion-select name="isPedido" [(ngModel)]="pedido.isPedido" placeholder="Seleccione Pedido/Presupuesto..." (ionChange)="onChanges()"
+              required>
+              <ion-option value="true">Pedido</ion-option>
+              <ion-option value="false">Presupuesto</ion-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label primary stacked>Comentarios</ion-label>
+            <ion-textarea rows="6" name="comentarios" placeholder="Comentarios..." [(ngModel)]="pedido.comentarios" (change)="onChanges()"></ion-textarea>
+          </ion-item>
+        </ion-list>
+        <button large full type="submit" [disabled]="!pedidoForm.valid || !isChange"><ion-icon name="checkmark"></ion-icon> Guardar</button>
+      </form>
+    </ion-item-group>
+    <ion-item-group>
+      <ion-item-divider light>DATOS DE USUARIO</ion-item-divider>
+      <button large full (click)="goRegistro()">
+          <ion-icon name="person-add"></ion-icon> Modificar
+      </button>
+    </ion-item-group>
+  </ion-list>
+</ion-content>

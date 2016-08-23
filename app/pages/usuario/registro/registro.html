@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar primary>
+    <ion-title>
+      <ion-icon name="person-add"></ion-icon> {{title}}</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <form #usuarioForm="ngForm" (ngSubmit)="registrarUsuario()">
+    <ion-list>
+      <ion-item>
+        <ion-label primary stacked>Razón Social</ion-label>
+        <ion-input type="text" name="razonSocial" placeholder="Nombre de la empresa" [(ngModel)]="usuario.razonSocial" (change)="onChange()"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label primary stacked>Persona de contacto</ion-label>
+        <ion-input type="text" name="nombre" [(ngModel)]="usuario.nombre" placeholder="Apellido y nombre " (change)="onChange()"
+          required pattern="^([a-z]+[,.]?[ ]?|[a-z]+['-]?)+$"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label primary stacked>E-mail</ion-label>
+        <ion-input type="email" name="email" [(ngModel)]="usuario.email" placeholder="e-mail de contacto " (change)="onChange()"
+          required pattern="(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|'(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*')@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label primary stacked>Teléfono</ion-label>
+        <ion-input type="text" name="telefono" [(ngModel)]="usuario.telefono" placeholder="Teléfono de contacto " (change)="onChange()"
+          required pattern="^\+?\d{1,3}?[- .]?\(?(?:\d{2,3})\)?[- .]?\d\d\d[- .]?\d\d\d\d$"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label primary stacked>Dirección</ion-label>
+        <ion-input type="text" name="direccion" [(ngModel)]="usuario.direccion" placeholder="Direccion de entrega " (change)="onChange()"
+          required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label primary stacked>Localidad</ion-label>
+        <ion-input type="text" name="localidad" [(ngModel)]="usuario.localidad" placeholder="Localidad o ciudad " (change)="onChange()"
+          required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label primary stacked>Provincia</ion-label>
+        <ion-input type="text" name="provincia" [(ngModel)]="usuario.provincia" placeholder="Provincia " (change)="onChange()" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label primary stacked>País</ion-label>
+        <ion-input type="text" name="pais" [(ngModel)]="usuario.pais" placeholder="País " (change)="onChange()" required></ion-input>
+      </ion-item>
+    </ion-list>
+    <button fab fab-bottom fab-center type="submit" [disabled]=" !isChange">
+    <ion-icon name="person-add" *ngIf="!(usuario.id > 0)"></ion-icon>
+    <ion-icon name="checkmark" *ngIf="(usuario.id > 0)"></ion-icon>
+  </button>
+  </form>
+</ion-content>

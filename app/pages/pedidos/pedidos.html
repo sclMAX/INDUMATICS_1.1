@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar primary>
+    <ion-title>
+      <ion-icon name="cart"></ion-icon> {{title}}</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-list>
+    <ion-item-group>
+      <ion-item-divider light>ACTUAL</ion-item-divider>
+      <button large full secondary [disabled]="!pedidoActual" (click)="goPedidoActual()">Ver Pedido</button>
+    </ion-item-group>
+    <ion-item-group>
+      <ion-item-divider light>ENVIADOS</ion-item-divider>
+      <ion-item-sliding *ngFor="let pedido of pedidosEnviados" >
+        <ion-item tappable (click)="goPedido(pedido)">
+          <h2><span *ngIf="pedido.isPedido" primary>PEDIDO Nro: 000{{(pedido.id * 1)}}</span><span *ngIf="!pedido.isPedido">PRESUPUESTO Nro: 000{{(pedido.id * 1)}}</span></h2>
+          <h3>Fecha: {{pedido.fecha|date:'shortDate'}}</h3>
+          <p>{{pedido.comentarios}}</p>
+          <ion-icon name="more" item-right></ion-icon>
+        </ion-item>
+        <ion-item-options>
+          <button danger (click)="removeItem(pedido)"><ion-icon name="trash"></ion-icon></button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-item-group>
+  </ion-list>
+</ion-content>

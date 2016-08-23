@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar primary>
+    <ion-title>{{title}}</ion-title>
+    <ion-buttons end>
+      <button (click)="goClose()">
+        <ion-icon name="close"></ion-icon>
+        cerrar
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-card>
+    <button fab fab-top fab-right *ngIf="isAddPosible" (click)="addPedido(perfil)">
+      <ion-icon name="cart"></ion-icon>
+    </button>
+    <img src="http://www.indumatics.com.ar/assets/media/perfiles/sm/{{perfil.idPerfil}}.png" />
+    <ion-card-content text-wrap>
+      <ion-card-title text-center>
+        <h1>{{perfil.idPerfil}}</h1>
+      </ion-card-title>
+      <h2> {{perfil.descripcion}}</h2>
+      <p>
+        Largo: {{perfil.largo}}mm<br> Kg./m: {{perfil.pxm}} Kg.<br> Barras por paquete: {{perfil.bxp}}
+      </p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

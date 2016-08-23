@@ -1,0 +1,15 @@
+{
+  "dependencies": {},
+  "devDependencies": {},
+  "globalDependencies": {
+    "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504",
+    "pouchdb": "registry:dt/pouchdb#5.4.4+20160724064500",
+    "pouchdb-adapter-websql": "registry:dt/pouchdb-adapter-websql#5.4.4+20160724064500",
+    "pouchdb-browser": "registry:dt/pouchdb-browser#5.4.4+20160724064500",
+    "pouchdb-core": "registry:dt/pouchdb-core#5.4.4+20160724064500",
+    "pouchdb-http": "registry:dt/pouchdb-http#5.4.4+20160724064500",
+    "pouchdb-mapreduce": "registry:dt/pouchdb-mapreduce#5.4.4+20160724064500",
+    "pouchdb-node": "registry:dt/pouchdb-node#5.4.4+20160724064500",
+    "pouchdb-replication": "registry:dt/pouchdb-replication#5.4.4+20160724064500"
+  }
+}

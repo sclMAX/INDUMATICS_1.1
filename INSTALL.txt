@@ -1,0 +1,9 @@
+ionic plugin add cordova-plugin-sqlite-2
+
+npm install pouchdb --save
+
+npm install -g typings
+
+typings install --global --save dt~pouchdb dt~pouchdb-adapter-websql dt~pouchdb-browser dt~pouchdb-core dt~pouchdb-http dt~pouchdb-mapreduce dt~pouchdb-node dt~pouchdb-replication
+
+

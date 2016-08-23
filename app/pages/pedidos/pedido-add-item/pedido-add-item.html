@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar primary>
+    <ion-title>{{title}}</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <form #addForm="ngForm" (ngSubmit)="add()">
+    <ion-list>
+      <ion-item>
+        <ion-label primary stacked>Cantidad</ion-label>
+        <ion-input type="number" placeholder="Cantidad de unidades" name="cantidad" [(ngModel)]="pedidoItem.cantidad" (change)="onChanges()"
+          required min="1"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label primary stacked>Color</ion-label>
+        <ion-select name="color" [(ngModel)]="pedidoItem.color" placeholder="Seleccione un color..." (ionChange)="onChanges()" required>
+          <ion-option *ngFor="let c of colores" [value]="c" (change)="onChanges()">{{c.color}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label primary stacked>Comentarios</ion-label>
+        <ion-textarea placeholder="Comentarios..." name="comentarios" [(ngModel)]="pedidoItem.comentario"></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label primary stacked>Peso total estimado (Kg.)</ion-label>
+        <ion-input type="text" name="pesoTotal" placeholder="peso total estimado..." [ngModel]="pesoTotal |number:'1.2-2'" disabled="true"></ion-input>
+      </ion-item>
+    </ion-list>
+    <button fab fab-bottom fab-left danger type="reset" (click)="cancel()">
+    <ion-icon name="close"></ion-icon>
+  </button>
+    <button fab fab-bottom fab-center type="submit" [disabled]="!addForm.valid">
+    <ion-icon name="add"></ion-icon>
+  </button>
+  </form>
+</ion-content>

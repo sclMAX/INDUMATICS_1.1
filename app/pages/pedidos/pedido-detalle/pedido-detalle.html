@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-navbar primary>
+    <ion-title>
+      {{title}}
+    </ion-title>
+    <ion-buttons end>
+      <button [disabled]="isModify" paceholder="Catalogo" (click)="goCatalogo()">
+        <ion-icon name="albums"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-list-header>
+    <p *ngIf="!isEdit">{{pedido.comentarios}}</p>
+    Total estimado: {{calculaTotal()|number:'1.2-2'}} Kg.
+  </ion-list-header>
+  <ion-grid>
+    <ion-row>
+      <ion-col width-20>Cod.</ion-col>
+      <ion-col width-40>Color</ion-col>
+      <ion-col width-20>Cant.</ion-col>
+      <ion-col width-20>Kg.</ion-col>
+    </ion-row>
+  </ion-grid>
+  <button fab fab-bottom fab-rigth danger *ngIf="isModify" (click)="cancelChanges()">
+    <ion-icon name="close-circle" ></ion-icon>
+  </button>
+  <button fab fab-left fab-fixed secondary *ngIf="isModify" (click)="saveChanges()">
+    <ion-icon name="checkmark" ></ion-icon>
+  </button>
+</ion-header>
+<ion-content>
+  <ion-list text-wrap>
+    <ion-item-sliding *ngFor="let item of items">
+      <ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col width-20>{{item.perfil.idPerfil}}</ion-col>
+            <ion-col width-40>{{item.color.color}}</ion-col>
+            <ion-col width-20>{{item.cantidad}}</ion-col>
+            <ion-col width-20>{{calcularSubtotal(item)|number:'1.2-2'}} Kg.</ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      <ion-item-options>
+        <button secondary (click)="goPerfil(item)"><ion-icon name="eye"></ion-icon></button>
+        <button light *ngIf="isEdit" [disabled]="!(item.cantidad > 1)" (click)="decCantidad(item)"><ion-icon name="remove-circle"></ion-icon></button>
+        <button light *ngIf="isEdit" (click)="incCantidad(item)"><ion-icon name="add-circle"></ion-icon></button>
+        <button danger *ngIf="isEdit" (click)="removeItem(item)"><ion-icon name="trash"></ion-icon></button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+</ion-content>
+<ion-footer>
+  <ion-list-footer>
+    <button fab fab-bottom fab-rigth [disabled]="isModify" *ngIf="isEdit" (click)="goConfig()">
+    <ion-icon name="options"></ion-icon>
+  </button>
+    <button fab fab-bottom fab-center [disabled]="(!pedido || isModify || !(items.length > 0))" *ngIf="isEdit" (click)="sendPedido()">
+    <ion-icon name="send" ></ion-icon>
+  </button>
+  </ion-list-footer>
+</ion-footer>
