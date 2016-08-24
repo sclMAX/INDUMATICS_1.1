@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
-import {NavController, Platform, Loading, LoadingController, ToastController, AlertController} from 'ionic-angular';
+import {NavController, Platform, Loading, LoadingController,
+  ToastController, AlertController, ModalController} from 'ionic-angular';
 import {Usuarios, Usuario} from '../../providers/usuarios/usuarios';
 import {Estados, Estado} from '../../providers/estados/estados';
 import {Lineas} from '../../providers/lineas/lineas';
@@ -25,7 +26,7 @@ export class HomePage {
   constructor(public navCtrl: NavController, private platform: Platform,
     private usuariosP: Usuarios, private estadosP: Estados, private lineasP: Lineas,
     private perfilesP: Perfiles, private coloresP: Colores, private loading: LoadingController,
-    private toast: ToastController, private alert: AlertController) {
+    private toast: ToastController, private alert: AlertController, private modal: ModalController) {
     this.title = "INDUMATICS S.A.";
     this.novedades = '';
   }
@@ -35,7 +36,11 @@ export class HomePage {
   }
 
   goRegistro() {
-    this.navCtrl.push(RegistroPage);
+    let modal = this.modal.create(RegistroPage);
+    modal.onDidDismiss(data => {
+      this.isRegistrado = data.ok;
+    })
+    modal.present();
   }
 
   goPedidos() {
@@ -89,9 +94,6 @@ export class HomePage {
 
   ionViewWillEnter() {
     this.platform.ready().then(() => {
-      this.usuariosP.getUsuario().subscribe(u => {
-          this.isRegistrado = (u.id > 0);
-        });
       this.estadosP.chkEstado().subscribe(res => {
         this.isUpdateAvailable = res.isUpdate;
         if (!res.estado.isLeido) {
@@ -109,7 +111,13 @@ export class HomePage {
             showNovedades.present();
           }
         }
+      }, err => {
+        console.error.bind(err);
       });
+      this.usuariosP.getUsuario().subscribe(u => {
+        this.isRegistrado = (u.id > 0);
+      });
+
     });
   }
 }

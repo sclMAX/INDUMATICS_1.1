@@ -53,8 +53,8 @@
 </ion-content>
 <ion-footer>
   <ion-list-footer>
-    <button fab fab-bottom fab-rigth [disabled]="isModify" *ngIf="isEdit" (click)="goConfig()">
-    <ion-icon name="options"></ion-icon>
+    <button fab fab-bottom fab-rigth [disabled]="isModify" *ngIf="isEdit" (click)="goUsuario()">
+    <ion-icon name="person-add"></ion-icon>
   </button>
     <button fab fab-bottom fab-center [disabled]="(!pedido || isModify || !(items.length > 0))" *ngIf="isEdit" (click)="sendPedido()">
     <ion-icon name="send" ></ion-icon>

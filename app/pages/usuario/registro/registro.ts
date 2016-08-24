@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, Loading, LoadingController, ToastController, AlertController} from 'ionic-angular';
+import {ViewController, Loading, LoadingController, ToastController, AlertController} from 'ionic-angular';
 import {Platform} from 'ionic-angular';
 import {FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
@@ -18,13 +18,16 @@ export class RegistroPage {
   isChange: boolean = false;
 
 
-  constructor(public navCtrl: NavController,
+  constructor(public viewCtrl: ViewController,
     private usuariosP: Usuarios, private platform: Platform, private loading: LoadingController,
     private toast: ToastController, private alert: AlertController) {
     this.title = "Registro de Usuario";
     this.usuario = new Usuario();
   }
 
+  cancel() {
+    this.viewCtrl.dismiss({ 'ok': false });
+  }
 
   registrarUsuario() {
     let t = this.toast.create({ duration: 2000 });
@@ -36,13 +39,18 @@ export class RegistroPage {
       load.present().then(() => {
         this.usuariosP.updateUsuario(this.usuario).subscribe(value => {
           load.dismiss().then(() => {
-            this.navCtrl.pop();
             t.setMessage('Usuario actualizado correctamente');
+            t.onDidDismiss(() => {
+              this.viewCtrl.dismiss({ 'ok': true });
+            });
             t.present();
           });
         }, err => {
           load.dismiss().then(() => {
             t.setMessage('Error al actualizar los datos ERROR:' + err);
+            t.onDidDismiss(() => {
+              this.isChange = true;
+            });
             t.present();
           });
         }, () => {
@@ -58,7 +66,9 @@ export class RegistroPage {
           this.usuario = value.result;
           load.dismiss().then(() => {
             t.setMessage('Usuario registrado correctamente con el ID:' + this.usuario.id);
-            this.navCtrl.setRoot(HomePage);
+            t.onDidDismiss(() => {
+              this.viewCtrl.dismiss({ 'ok': true });
+            });
             t.present();
           });
         }, err => {
@@ -73,24 +83,27 @@ export class RegistroPage {
                   {
                     text: 'Cancelar',
                     role: 'cancel',
-                    handler: data => { this.navCtrl.setRoot(HomePage); }
+                    handler: data => { this.isChange = true; }
                   },
                   {
                     text: 'Aceptar',
                     handler: data => {
                       this.usuariosP.recuperarCuenta(this.usuario, data.codigo, id).subscribe(() => {
-                        t.setMessage('Datos guardados correctamente!');
-                        this.navCtrl.setRoot(HomePage);
-                        t.present();
+                        alert.onDidDismiss(() => {
+                          this.viewCtrl.dismiss({ 'ok': true });
+                        });
                       }, err => {
                         if (err.code == ResponseClass.RES_ACCESO_DENEGADO) {
                           t.setMessage('Codigo Incorrecto!');
                         } else {
                           t.setMessage('Error: ' + err.message);
                         }
+                        t.onDidDismiss(() => {
+                          this.isChange = true;
+                        })
                         t.present();
                       }, () => {
-                        this.navCtrl.setRoot(HomePage);
+                        this.viewCtrl.dismiss({ 'ok': false });
                       });
                     }
                   }
@@ -99,6 +112,9 @@ export class RegistroPage {
               alert.present();
             } else {
               t.setMessage('Error al intentar registrar el ususario ERROR: ' + err.message);
+              t.onDidDismiss(() => {
+                this.viewCtrl.dismiss({ 'ok': false });
+              });
               t.present();
             }
           });
@@ -111,22 +127,13 @@ export class RegistroPage {
 
   ionViewLoaded() {
     this.platform.ready().then(() => {
-      let load = this.loading.create({
-        content: 'Cargando datos...',
-        showBackdrop: false,
-        dismissOnPageChange: true,
-      });
-      load.present().then(() => {
-        this.usuariosP.getUsuario()
-          .subscribe(value => {
-            this.usuario = value;
-            if (this.usuario.id > 0) { this.title = 'Modificar datos...' };
-          }, err => {
-            console.error.bind(err);
-          }, () => {
-            load.dismiss();
-          });
-      });
+      this.usuariosP.getUsuario()
+        .subscribe(value => {
+          this.usuario = value;
+          if (this.usuario.id > 0) { this.title = 'Modificar datos...' };
+        }, err => {
+          console.error.bind(err);
+        });
     });
   }
 

@@ -11,26 +11,22 @@
         <ion-list>
           <ion-item>
             <ion-label primary stacked>Tipo</ion-label>
-            <ion-select name="isPedido" [(ngModel)]="pedido.isPedido" placeholder="Seleccione Pedido/Presupuesto..." (ionChange)="onChanges()"
-              required>
+            <ion-select name="isPedido" [(ngModel)]="pedido.isPedido" placeholder="Seleccione Pedido/Presupuesto..." required>
               <ion-option value="true">Pedido</ion-option>
               <ion-option value="false">Presupuesto</ion-option>
             </ion-select>
-            
+
           </ion-item>
           <ion-item>
             <ion-label primary stacked>Comentarios</ion-label>
-            <ion-textarea rows="6" name="comentarios" placeholder="Comentarios..." [(ngModel)]="pedido.comentarios" (change)="onChanges()"></ion-textarea>
+            <ion-textarea rows="6" name="comentarios" placeholder="Comentarios..." [(ngModel)]="pedido.comentarios"></ion-textarea>
           </ion-item>
         </ion-list>
-        <button large full type="submit" [disabled]="!pedidoForm.valid || !isChange"><ion-icon name="checkmark"></ion-icon> Guardar</button>
+        <button fab fab-bottom fab-left danger type="reset" (click)="cancel()">
+          <ion-icon name="close"></ion-icon>
+        </button>
+        <button fab fab-bottom fab-center type="submit" [disabled]="!pedidoForm.valid"><ion-icon name="send"></ion-icon></button>
       </form>
-    </ion-item-group>
-    <ion-item-group>
-      <ion-item-divider light>DATOS DE USUARIO</ion-item-divider>
-      <button large full (click)="goRegistro()">
-          <ion-icon name="person-add"></ion-icon> Modificar
-      </button>
     </ion-item-group>
   </ion-list>
 </ion-content>

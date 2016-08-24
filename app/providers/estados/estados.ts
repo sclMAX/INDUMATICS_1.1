@@ -28,6 +28,7 @@ export class EstadoResult {
   estado: Estado;
   constructor() {
     this.isUpdate = false;
+    this.estado = new Estado();
   }
 }
 
@@ -76,28 +77,47 @@ export class Estados {
     return Observable.create(obs => {
       if (!this.db) { this.initDB(); }
       this.db.get(id).then(doc => {
-        obs.next(doc.doc);
+        obs.next(<Estado>JSON.parse(JSON.stringify(doc.doc)));
       }).catch(err => {
         obs.error(err);
       });
     });
   }
 
+  private genResult(): EstadoResult {
+    let r = new EstadoResult();
+    if (this.localEstado) {
+      r.estado.catalogoVersion = this.localEstado.catalogoVersion;
+      r.isUpdate = (this.serverEstado.catalogoVersion > this.localEstado.catalogoVersion);
+      if (this.serverEstado.novedades != this.localEstado.novedades) {
+        r.estado.novedades = this.serverEstado.novedades;
+        r.estado.isLeido = false;
+      } else {
+        r.estado.novedades = this.localEstado.novedades;
+        r.estado.isLeido = this.localEstado.isLeido;
+      }
+    } else {
+      r.isUpdate = true;
+      r.estado.catalogoVersion = new Date(0);
+      r.estado.novedades = this.serverEstado.novedades;
+      r.estado.isLeido = false;
+    }
+    return r;
+  }
+
   public setCatalogoVersionNow(): Observable<boolean> {
     return Observable.create(obs => {
       this.localGet(idL).subscribe(estado => {
-        if (estado) {
-          estado.catalogoVersion = new Date();
-        } else {
-          estado = new Estado();
-        }
+        estado.catalogoVersion = new Date();
         this.updateLocalEstado(estado).subscribe(res => {
+          this.localEstado = estado;
           obs.next(res.response);
         }, err => {
           obs.error(err);
         });
       }, err => {
         this.updateLocalEstado(new Estado()).subscribe(res => {
+          this.localEstado = new Estado();
           obs.next(res.response);
         }, err => {
           obs.error(err);
@@ -110,8 +130,6 @@ export class Estados {
     return Observable.create(obs => {
       this.localSave(idL, estado).subscribe(() => {
         this.localEstado = estado;
-        this.serverEstado = null;
-        this.localSave(idS, this.serverEstado).subscribe();
         obs.next(new ResponseClass.Response(true, ResponseClass.RES_OK, 'Se actualizao correctamente el estado local'));
         obs.complete();
       }, err => {
@@ -124,7 +142,7 @@ export class Estados {
     return Observable.create(obs => {
       this.serverGetEstado().subscribe(res => {
         if (res.response) {
-          this.serverEstado = res.result[0];
+          this.serverEstado = <Estado>JSON.parse(JSON.stringify(res.result[0]));
           this.localSave(idS, this.serverEstado).subscribe(() => {
             obs.next(this.serverEstado);
             obs.complete();
@@ -147,40 +165,21 @@ export class Estados {
    */
   public chkEstado(): Observable<EstadoResult> {
     return Observable.create(obs => {
-      this.localGet(idL).subscribe(estado => {
-        this.localEstado = estado;        
-        let resEstado = new EstadoResult();
-        resEstado.estado = this.localEstado;
-        this.localGet(idS).subscribe(sEstado => {
-          this.serverEstado = sEstado;
-          if (this.serverEstado) {
-            resEstado.isUpdate = (this.serverEstado.catalogoVersion > this.localEstado.catalogoVersion);
-            if ((resEstado.isUpdate) || (this.serverEstado.novedades != this.localEstado.novedades)) {
-              resEstado.estado = this.serverEstado;
-            }
-          }
-          obs.next(resEstado);
+      this.localGet(idS).subscribe(se => {
+        this.serverEstado = se;
+        this.localGet(idL).subscribe(le => {
+          this.localEstado = le;
+          let r = this.genResult();
+          obs.next(r);
           obs.complete();
         }, err => {
-          obs.next(resEstado);
+          let r = this.genResult();
+          obs.next(r);
           obs.complete();
-        });
-      }, err => {
-        this.localGet(idS).subscribe(estado => {
-          this.serverEstado = estado;
-          if (this.serverEstado) {
-            let resEstado = new EstadoResult();
-            resEstado.isUpdate = true;
-            resEstado.estado = this.serverEstado;
-            obs.next(resEstado);
-            obs.complete();
-          } else {
-            obs.error();
-          }
-        }, err => {
-          obs.error();
         })
-      });
+      }, err => {
+        obs.error(err);
+      })
     });
   }
 

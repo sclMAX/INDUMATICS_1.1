@@ -45,6 +45,9 @@
         <ion-input type="text" name="pais" [(ngModel)]="usuario.pais" placeholder="País " (change)="onChange()" required></ion-input>
       </ion-item>
     </ion-list>
+    <button fab fab-bottom fab-left danger type="reset" (click)="cancel()">
+      <ion-icon name="close"></ion-icon>
+    </button>
     <button fab fab-bottom fab-center type="submit" [disabled]=" !isChange">
     <ion-icon name="person-add" *ngIf="!(usuario.id > 0)"></ion-icon>
     <ion-icon name="checkmark" *ngIf="(usuario.id > 0)"></ion-icon>

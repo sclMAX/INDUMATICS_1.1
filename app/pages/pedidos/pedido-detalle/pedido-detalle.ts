@@ -5,6 +5,7 @@ import {PerfilesDetallePage} from '../../catalogo/perfiles-detalle/perfiles-deta
 import {PedidoConfigPage} from '../pedido-config/pedido-config';
 import {CatalogoPage} from '../../catalogo/catalogo';
 import {HomePage} from '../../home/home';
+import {RegistroPage} from '../../usuario/registro/registro';
 
 
 @Component({
@@ -42,8 +43,9 @@ export class PedidoDetallePage {
     modal.present();
   }
 
-  goConfig() {
-    this.navCtrl.push(PedidoConfigPage, { 'pedido': this.pedido });
+  goUsuario() {
+    let modal = this.modal.create(RegistroPage);
+    modal.present();
   }
 
   selectIsPedido(isPedido: boolean) {
@@ -51,26 +53,33 @@ export class PedidoDetallePage {
   }
 
   sendPedido() {
-    let load = this.loading.create({
-      content: 'Enviando pedido...',
-    });
-    let t = this.toast.create({ duration: 3000 });
-    load.present().then(() => {
-      this.pedidosP.sendPedido(this.pedido).subscribe(res => {
-        this.navCtrl.setRoot(HomePage);
-        load.dismiss().then(() => {
-          t.setMessage(res.message);
-          t.present();
+    let modal = this.modal.create(PedidoConfigPage, { 'pedido': this.pedido });
+    modal.onDidDismiss(data => {
+      if (data.pedido) {
+        this.pedido = data.pedido;
+        let load = this.loading.create({
+          content: 'Enviando pedido...',
         });
-      }, err => {
-        load.dismiss().then(() => {
-          t.setMessage(err.message);
-          t.present();
+        let t = this.toast.create({ duration: 3000 });
+        load.present().then(() => {
+          this.pedidosP.sendPedido(this.pedido).subscribe(res => {
+            this.navCtrl.setRoot(HomePage);
+            load.dismiss().then(() => {
+              t.setMessage(res.message);
+              t.present();
+            });
+          }, err => {
+            load.dismiss().then(() => {
+              t.setMessage(err.message);
+              t.present();
+            });
+          }, () => {
+            load.dismiss();
+          })
         });
-      }, () => {
-        load.dismiss();
-      })
+      }
     });
+    modal.present();
   }
 
   saveChanges() {

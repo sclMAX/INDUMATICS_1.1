@@ -8,7 +8,10 @@
   <ion-list>
     <ion-item-group>
       <ion-item-divider light>ACTUAL</ion-item-divider>
-      <button large full secondary [disabled]="!pedidoActual" (click)="goPedidoActual()">Ver Pedido</button>
+      <button large full secondary [disabled]="!pedidoActual" (click)="goPedidoActual()">
+       <span *ngIf="pedidoActual"> Ver Pedido</span>
+       <span *ngIf="!pedidoActual"> Sin Pedido</span>
+      </button>
     </ion-item-group>
     <ion-item-group>
       <ion-item-divider light>ENVIADOS</ion-item-divider>
