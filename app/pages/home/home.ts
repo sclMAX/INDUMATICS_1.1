@@ -87,11 +87,11 @@ export class HomePage {
     });
   }
 
-  ionViewLoaded() {
+  ionViewWillEnter() {
     this.platform.ready().then(() => {
       this.usuariosP.getUsuario().subscribe(u => {
-        this.isRegistrado = (u.id > 0);
-      });
+          this.isRegistrado = (u.id > 0);
+        });
       this.estadosP.chkEstado().subscribe(res => {
         this.isUpdateAvailable = res.isUpdate;
         if (!res.estado.isLeido) {

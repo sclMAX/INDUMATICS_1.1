@@ -148,7 +148,7 @@ export class Estados {
   public chkEstado(): Observable<EstadoResult> {
     return Observable.create(obs => {
       this.localGet(idL).subscribe(estado => {
-        this.localEstado = estado;
+        this.localEstado = estado;        
         let resEstado = new EstadoResult();
         resEstado.estado = this.localEstado;
         this.localGet(idS).subscribe(sEstado => {
