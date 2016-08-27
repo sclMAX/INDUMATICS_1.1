@@ -14,6 +14,8 @@ export class PedidoAddItemPage {
   pedidoItem: Item;
   pesoTotal: number;
   colores: Array<Color>;
+  isPaquetes: boolean = false;
+  cantidadPaquetes: number;
 
   constructor(public viewCtrl: ViewController, private parametros: NavParams, private coloresP: Colores,
     private platform: Platform, private toast: ToastController) {
@@ -31,6 +33,9 @@ export class PedidoAddItemPage {
   }
 
   onChanges() {
+    if(this.isPaquetes){
+      this.pedidoItem.cantidad = this.pedidoItem.perfil.bxp * this.cantidadPaquetes;
+    }
     if ((this.pedidoItem.color) && (this.pedidoItem.cantidad > 0)) {
       let l: number = this.pedidoItem.perfil.largo / 1000;
       let pxm: number = this.pedidoItem.perfil.pxm;
