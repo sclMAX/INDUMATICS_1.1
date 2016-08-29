@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Platform, ionicBootstrap} from 'ionic-angular';
-import {StatusBar} from 'ionic-native';
+import {StatusBar, Splashscreen} from 'ionic-native';
 import {HomePage} from './pages/home/home';
 import {Estados} from './providers/estados/estados';
 
@@ -15,6 +15,7 @@ export class MyApp {
   constructor(platform: Platform, private estadoP: Estados) {
     platform.ready().then(() => {
       estadoP.getServerEstado().subscribe();
+      Splashscreen.hide();
       StatusBar.styleDefault();
     });
   }
